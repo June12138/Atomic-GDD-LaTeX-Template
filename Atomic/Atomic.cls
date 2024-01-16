@@ -19,6 +19,7 @@
 \RequirePackage{xpatch}
 \RequirePackage{minitoc}
 \RequirePackage{emptyPage}
+\RequirePackage{float}
 %\RequirePackage{ctex} %uncomment for Chinese documents
 
 %---Basic infos
@@ -79,7 +80,7 @@
     \xpretocmd\footrule{\color{\themeColor}}{}{\PatchFailed}
     %headers
     \fancyhead[L]{\toChapter}%link to the start of the chapter at left header
-    \fancyhead[C]{\thepage}
+    \fancyhead[C]{\@myTitle}
     \fancyhead[R]{\toSection}
     %footers
     \fancyfoot[L]{\toChapter}%link to the start of the chapter at left header
@@ -95,7 +96,7 @@
    }{}{\FAILED}
 %---commands
 %draw line
-\newcommand{\decoRule}{\rule{.8\textwidth}{.4pt}}
+\newcommand{\quickRule}{\color{\themeColor}\rule{.8\textwidth}{.4pt}\color{black}}
 %draw cover as background
 \newcommand{\insertCover}{
 \backgroundsetup{
@@ -119,6 +120,15 @@
     \hyperlink{section.\arabic{chapter}.\arabic{section}}
     {\rightmark}
 }
-
+%quick insert images
+\newcommand{\singleImg}[4]{
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale = #2]{#1}\\
+		\quickRule
+		\caption{#3}
+		\label{fig:#4}
+	\end{figure}
+}
 %---renew commands
 \renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
