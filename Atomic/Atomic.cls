@@ -7,6 +7,8 @@
 \RequirePackage[pages=some]{background}
 \RequirePackage{tikz}
 \RequirePackage[svgnames]{xcolor}
+\RequirePackage{xparse}
+\RequirePackage{etoolbox}
 \RequirePackage{eso-pic}
 \RequirePackage{setspace}
 \RequirePackage{makeidx}
@@ -20,6 +22,8 @@
 \RequirePackage{minitoc}
 \RequirePackage{emptyPage}
 \RequirePackage{float}
+\RequirePackage[footnote, nohyperlinks]{acronym}
+\RequirePackage{atbegshi}
 %\RequirePackage{ctex} %uncomment for Chinese documents
 
 %---Basic infos
@@ -75,17 +79,13 @@
     \pagestyle{fancy}
     \fancyhead{}\fancyfoot{}
     \renewcommand{\headrulewidth}{1pt}
-    \renewcommand{\footrulewidth}{1pt}
     \xpretocmd\headrule{\color{\themeColor}}{}{\PatchFailed}
-    \xpretocmd\footrule{\color{\themeColor}}{}{\PatchFailed}
     %headers
     \fancyhead[L]{\toChapter}%link to the start of the chapter at left header
     \fancyhead[C]{\@myTitle}
     \fancyhead[R]{\toSection}
     %footers
-    \fancyfoot[L]{\toChapter}%link to the start of the chapter at left header
-    \fancyfoot[C]{\thepage}
-    \fancyfoot[R]{\toSection}
+    \fancyfoot[R]{\thepage}
     %---setup minitoc
     \dominitoc
     \mtcsetrules{*}{off}
@@ -94,6 +94,10 @@
 \apptocmd\@chapter{
     \minitoc%mini table of contents
    }{}{\FAILED}
+%---begin page setup
+\AtBeginShipout{
+    \acresetall
+}
 %---commands
 %draw line
 \newcommand{\quickRule}{\color{\themeColor}\rule{.8\textwidth}{.4pt}\color{black}}
@@ -110,6 +114,15 @@
 }
 \BgThispage
 }
+%---custom footnote rule
+
+\def\footnoterule{%
+  \kern-3\p@
+  \hbox{%
+    \tikz \fill[color=\themeColor]
+        (0,0) rectangle (2in,.4pt);%
+  }%
+  \kern 2.6\p@}
 %draw link to current chapter
 \newcommand{\toChapter}{
     \hyperlink{chapter.\arabic{chapter}}
@@ -121,14 +134,15 @@
     {\rightmark}
 }
 %quick insert images
-\newcommand{\singleImg}[4]{
+\newcommand{\singleImg}[4][1.0]{
 	\begin{figure}[h]
 		\centering
-		\includegraphics[scale = #2]{#1}\\
+		\includegraphics[scale = #1]{#2}\\
 		\quickRule
 		\caption{#3}
 		\label{fig:#4}
 	\end{figure}
 }
 %---renew commands
-\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}%to output chapter name in the header
+

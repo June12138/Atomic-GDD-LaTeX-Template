@@ -5,7 +5,7 @@ TeX template for a game design document.
 - set theme color of the document with \setThemeColor{yourcolor}
 - set cover of the document with \setBackground{your image}
 - revision history
-- quickly insert a single image with \singleImg{path}{size}{caption}{label}
+- quickly insert a single image with \singleImg[size]{path}{caption}{label}
 ### navigation: 
 - automatic table of content generation + links
 - automatic mini table of contents at start of every chapter
